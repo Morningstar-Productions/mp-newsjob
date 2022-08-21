@@ -136,7 +136,7 @@ RegisterNetEvent("Cam:ToggleCam", function()
         TaskPlayAnim(GetPlayerPed(PlayerId()), camanimDict, camanimName, 1.0, -1, -1, 50, 0, 0, 0, 0)
         cam_net = netid
         holdingCam = true
-		DisplayNotification("Weazle Overlay ~INPUT_PICKUP~ \nFilm Overlay: ~INPUT_INTERACTION_MENU~")
+		DisplayNotification("Weazle Overlay ~INPUT_PICKUP~ \nFilm Overlay: ~INPUT_COVER~")
     else
         ClearPedSecondaryTask(GetPlayerPed(PlayerId()))
         DetachEntity(NetToObj(cam_net), 1, 1)
@@ -162,7 +162,7 @@ CreateThread(function()
 
 				DisablePlayerFiring(PlayerId(), true)
 				DisableControlAction(0,25,true) -- disable aim
-				DisableControlAction(0, 44,  true) -- INPUT_COVER
+				--DisableControlAction(0, 44,  true) -- INPUT_COVER
 				DisableControlAction(0,37,true) -- INPUT_SELECT_WEAPON
 				SetCurrentPedWeapon(PlayerPedId(), GetHashKey("WEAPON_UNARMED"), true)
 				Wait(7)
@@ -183,7 +183,7 @@ CreateThread(function()
 	while true do
 		if PlayerJob.name == "reporter" then
 			if holdingCam then
-				if IsControlJustReleased(1, 244) then
+				if IsControlJustReleased(1, 44) then
 					movcamera = true
 					SetTimecycleModifier("default")
 					SetTimecycleModifierStrength(0.3)
@@ -379,7 +379,7 @@ CreateThread(function()
 				end
 				DisablePlayerFiring(PlayerId(), true)
 				DisableControlAction(0,25,true) -- disable aim
-				DisableControlAction(0, 44,  true) -- INPUT_COVER
+				--DisableControlAction(0, 44,  true) -- INPUT_COVER
 				DisableControlAction(0,37,true) -- INPUT_SELECT_WEAPON
 				SetCurrentPedWeapon(PlayerPedId(), GetHashKey("WEAPON_UNARMED"), true)
 				if IsPedInAnyVehicle(PlayerPedId(), false) or QBCore.Functions.GetPlayerData().metadata["ishandcuffed"] or holdingMic then

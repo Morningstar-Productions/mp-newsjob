@@ -8,6 +8,12 @@ News Job For QB-Core
 * Added Blip for Weazel News.
 * Created Items for Camera, News Mic, and Boom Mic
 
+# Credits
+
+* Project Sloth for the Images https://discord.com/invite/projectsloth
+* QBCore and Kakarot for the original resource https://github.com/qbcore-framework/qb-newsjob/
+* Futte for futte-newspaper (https://github.com/xFutte/futte-newspaper)
+
 ## Dependencies:
 
 * qb-target https://github.com/qbcore-framework/qb-target

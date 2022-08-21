@@ -21,8 +21,8 @@ Reworked News Job for QBCore Framework - Added to by xViperAG
 # Credits
 
 * Project Sloth for the Images https://discord.com/invite/projectsloth
-* QBCore and Kakarot for the original resource https://github.com/qbcore-framework/qb-newsjob/
-* xFutte for futte-newspaper [xFutte](https://github.com/xFutte)
+* [QBCore](https://github.com/qbcore-framework/qb-newsjob/) and Kakarot for the original resource
+* [xFutte](https://github.com/xFutte) for futte-newspaper
 
 ## If you have any ideas or have added things to the script, don't be afraid to make a Pull Request!
 

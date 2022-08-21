@@ -5,9 +5,7 @@ Reworked News Job for QBCore Framework - Added to by xViperAG
 ### - xViperAG (OuroborosRP)
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/xviperag)
 
-## Join the Discord
-
-* https://discord.gg/3CXrkvQVds
+## Join the [Discord](https://discord.gg/3CXrkvQVds)
 
 # Just Added (1.0)
 

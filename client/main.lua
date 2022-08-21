@@ -73,17 +73,20 @@ RegisterNetEvent("newsjob:Duty", function()
 end)
 
 function TakeOutVehicle(vehicleInfo)
-    local coords = Config.Locations["vehicle"].coords
-    QBCore.Functions.SpawnVehicle(vehicleInfo, function(veh)
-        SetVehicleNumberPlateText(veh, "WZNW"..tostring(math.random(1000, 9999)))
-        SetEntityHeading(veh, coords.w)
-        exports['ps-fuel']:SetFuel(veh, 100.0)
-        TaskWarpPedIntoVehicle(PlayerPedId(), veh, -1)
-        TriggerEvent("vehiclekeys:client:SetOwner", QBCore.Functions.GetPlate(veh))
-        SetVehicleEngineOn(veh, true, true)
-        SetVehicleLivery(veh, 2)
-        CurrentPlate = QBCore.Functions.GetPlate(veh)
-    end, coords, true)
+    if PlayerJob.name == "reporter" and  onDuty then
+        local coords = Config.Locations["vehicle"].coords
+        QBCore.Functions.TriggerCallback('QBCore:Server:SpawnVehicle', function(netId)
+            local veh = NetToVeh(netId)
+            SetVehicleNumberPlateText(veh, "WZNW"..tostring(math.random(1000, 9999)))
+            SetEntityHeading(veh, coords.w)
+            exports['ps-fuel']:SetFuel(veh, 100.0)
+            TaskWarpPedIntoVehicle(PlayerPedId(), veh, -1)
+            TriggerEvent("vehiclekeys:client:SetOwner", QBCore.Functions.GetPlate(veh))
+            SetVehicleEngineOn(veh, true, true)
+            SetVehicleLivery(veh, 2)
+            CurrentPlate = QBCore.Functions.GetPlate(veh)
+        end, vehicleInfo, coords, true)
+    end
 end
 
 function MenuGarage()
@@ -119,17 +122,19 @@ function MenuGarage()
 end
 
 function TakeOutHelicopters(vehicleInfo)
-    local coords = Config.Locations["heli"].coords
-    QBCore.Functions.SpawnVehicle(vehicleInfo, function(veh)
-        SetVehicleNumberPlateText(veh, "WZNW"..tostring(math.random(1000, 9999)))
-        SetEntityHeading(veh, coords.w)
-        exports['ps-fuel']:SetFuel(veh, 100.0)
-        TaskWarpPedIntoVehicle(PlayerPedId(), veh, -1)
-        TriggerEvent("vehiclekeys:client:SetOwner", QBCore.Functions.GetPlate(veh))
-        SetVehicleEngineOn(veh, true, true)
-        SetVehicleLivery(veh, 2)
-        CurrentPlate = QBCore.Functions.GetPlate(veh)
-    end, coords, true)
+    if PlayerJob.name == "reporter" and  onDuty then
+        local coords = Config.Locations["heli"].coords
+        QBCore.Functions.SpawnVehicle(vehicleInfo, function(veh)
+            SetVehicleNumberPlateText(veh, "WZNW"..tostring(math.random(1000, 9999)))
+            SetEntityHeading(veh, coords.w)
+            exports['ps-fuel']:SetFuel(veh, 100.0)
+            TaskWarpPedIntoVehicle(PlayerPedId(), veh, -1)
+            TriggerEvent("vehiclekeys:client:SetOwner", QBCore.Functions.GetPlate(veh))
+            SetVehicleEngineOn(veh, true, true)
+            SetVehicleLivery(veh, 2)
+            CurrentPlate = QBCore.Functions.GetPlate(veh)
+        end, coords, true)
+    end
 end
 
 function MenuHeliGarage()
@@ -220,6 +225,16 @@ CreateThread(function()
     end
 end)
 
+RegisterNetEvent("newsjob:shop", function()
+    if not onDuty then TriggerEvent('QBCore:Notify', "Not clocked in!", 'error') else
+        TriggerServerEvent("inventory:server:OpenInventory", "shop", "reporter", {
+            label = "Weazel News Equipment",
+            items = Config.Items,
+            slots = #Config.Items,
+        })
+    end
+end)
+
 CreateThread(function()
     for k, v in pairs(Config.Locations["duty"]) do
         exports['qb-target']:AddBoxZone("Duty_"..k, vector3(v.x, v.y, v.z), 1, 1, {
@@ -241,6 +256,50 @@ CreateThread(function()
             distance = 1.5
         })
     end
+end)
+
+CreateThread(function()
+    for k, v in pairs(Config.Locations["shop"]) do
+        exports['qb-target']:AddBoxZone("NewsArmory_"..k, vector3(v.x, v.y, v.z), 1, 1, {
+            name = "NewsArmory_"..k,
+            heading = 32,
+            debugPoly = false,
+            minZ = v.z - 1,
+            maxZ = v.z + 1,
+        }, {
+            options = {
+                {  
+                    type = "client",
+                    event = "newsjob:shop",
+                    icon = "fas fa-basket-shopping",
+                    label = "Open Armory",
+                    job = "reporter",
+                },
+            },
+            distance = 1.5
+        })
+    end
+end)
+
+CreateThread(function()
+    exports['qb-target']:AddBoxZone("NewsReport", vector3(-591.67, -937.14, 23.88), 1.2, 2.8, {
+        name = "NewsReport",
+        heading = 0,
+        debugPoly = false,
+        minZ = 23.88 - 1,
+        maxZ = 23.88 + 1,
+    }, {
+        options = {
+            {  
+                type = "client",
+                event = "newsstands:client:openNewspaper",
+                icon = "fas fa-newspaper",
+                label = "Write Report",
+                job = "reporter",
+            },
+        },
+        distance = 1.5
+    })
 end)
 
 RegisterNetEvent('qb-newsjob:client:TakeOutVehicle', function(data)

@@ -1,6 +1,11 @@
 # qb-newsjob
 Reworked News Job for QBCore Framework - Added to by xViperAG
 
+## Support me on Ko-Fi!
+
+* xViperAG (OuroborosRP)
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/xviperag)
+
 # Just Added (1.0)
 
 * Target Config for Armory, Toggle Duty, and Writing Station.

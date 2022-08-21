@@ -33,7 +33,7 @@ Reworked News Job for QBCore Framework - Added to by xViperAG
 
 ## Optional Dependencies
 
-* futte-newspaper https://github.com/xViperAG/futte-newspaper/blob/master/client/client.lua
+* futte-newspaper https://github.com/xFutte/futte-newspaper/
 
 ## Need a Weazel News? Here are some suggestions!
 

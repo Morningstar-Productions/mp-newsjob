@@ -22,7 +22,7 @@ Reworked News Job for QBCore Framework - Added to by xViperAG
 
 * Project Sloth for the Images https://discord.com/invite/projectsloth
 * QBCore and Kakarot for the original resource https://github.com/qbcore-framework/qb-newsjob/
-* Futte for futte-newspaper (https://github.com/xFutte/futte-newspaper)
+* xFutte for futte-newspaper (https://github.com/xFutte/futte-newspaper)
 
 ## If you have any ideas or have added things to the script, don't be afraid to make a Pull Request!
 
@@ -30,10 +30,6 @@ Reworked News Job for QBCore Framework - Added to by xViperAG
 
 * qb-target https://github.com/qbcore-framework/qb-target
 * qb-inventory https://github.com/qbcore-framework/qb-inventory
-
-## Optional Dependencies
-
-* futte-newspaper https://github.com/xFutte/futte-newspaper/
 
 ## Need a Weazel News? Here are some suggestions!
 

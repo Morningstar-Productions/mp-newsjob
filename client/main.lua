@@ -293,7 +293,7 @@ CreateThread(function()
         options = {
             {  
                 type = "client",
-                event = "newsstands:client:openNewspaper",
+                event = "'newspaper:client:openNewspaper",
                 icon = "fas fa-newspaper",
                 label = "Write Report",
                 job = "reporter",

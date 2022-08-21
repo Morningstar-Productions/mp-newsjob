@@ -1,6 +1,13 @@
 # qb-newsjob
 News Job For QB-Core
 
+# Just Added (1.0)
+
+* Target Config for Armory, Toggle Duty, and Writing Station.
+* Used futte-newspaper to create Writing Stand.
+* Added Blip for Weazel News.
+* Created Items for Camera, News Mic, and Boom Mic
+
 ## Dependencies:
 
 * qb-target https://github.com/qbcore-framework/qb-target

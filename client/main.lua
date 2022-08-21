@@ -79,7 +79,7 @@ function TakeOutVehicle(vehicleInfo)
             local veh = NetToVeh(netId)
             SetVehicleNumberPlateText(veh, "WZNW"..tostring(math.random(1000, 9999)))
             SetEntityHeading(veh, coords.w)
-            exports['ps-fuel']:SetFuel(veh, 100.0)
+            exports['LegacyFuel']:SetFuel(veh, 100.0)
             TaskWarpPedIntoVehicle(PlayerPedId(), veh, -1)
             TriggerEvent("vehiclekeys:client:SetOwner", QBCore.Functions.GetPlate(veh))
             SetVehicleEngineOn(veh, true, true)
@@ -123,17 +123,18 @@ end
 
 function TakeOutHelicopters(vehicleInfo)
     if PlayerJob.name == "reporter" and  onDuty then
-        local coords = Config.Locations["heli"].coords
-        QBCore.Functions.SpawnVehicle(vehicleInfo, function(veh)
+    	local coords = Config.Locations["heli"].coords
+    	QBCore.Functions.TriggerCallback('QBCore:Server:SpawnVehicle', function(netId)
+            local veh = NetToVeh(netId)
             SetVehicleNumberPlateText(veh, "WZNW"..tostring(math.random(1000, 9999)))
             SetEntityHeading(veh, coords.w)
-            exports['ps-fuel']:SetFuel(veh, 100.0)
+            exports['LegacyFuel']:SetFuel(veh, 100.0)
             TaskWarpPedIntoVehicle(PlayerPedId(), veh, -1)
             TriggerEvent("vehiclekeys:client:SetOwner", QBCore.Functions.GetPlate(veh))
             SetVehicleEngineOn(veh, true, true)
             SetVehicleLivery(veh, 2)
             CurrentPlate = QBCore.Functions.GetPlate(veh)
-        end, coords, true)
+    	end, vehicleInfo, coords, true)
     end
 end
 

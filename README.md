@@ -1,5 +1,5 @@
 # qb-newsjob
-News Job For QB-Core
+Reworked News Job for QBCore Framework - Added to by xViperAG
 
 # Just Added (1.0)
 
@@ -8,11 +8,19 @@ News Job For QB-Core
 * Added Blip for Weazel News.
 * Created Items for Camera, News Mic, and Boom Mic
 
+# Working On
+
+* New Car Spawn System
+* Remove ALL DrawText3Ds from the script
+* Change to PolyZone
+
 # Credits
 
 * Project Sloth for the Images https://discord.com/invite/projectsloth
 * QBCore and Kakarot for the original resource https://github.com/qbcore-framework/qb-newsjob/
 * Futte for futte-newspaper (https://github.com/xFutte/futte-newspaper)
+
+## If you have any ideas or have added things to the script, don't be afraid to make a Pull Request!
 
 ## Dependencies:
 

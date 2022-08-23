@@ -32,6 +32,7 @@ Reworked News Job for QBCore Framework - Added to by xViperAG
 
 * qb-target https://github.com/qbcore-framework/qb-target
 * qb-inventory https://github.com/qbcore-framework/qb-inventory
+* futte-newspaper https://github.com/xFutte/futte-newspaper
 
 ## Need a Weazel News? Here are some suggestions!
 

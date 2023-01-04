@@ -1,4 +1,4 @@
-# qb-newsjob
+# mp-newsjob
 Reworked News Job for QBCore Framework - Added to by xViperAG
 
 ## Support me on Ko-Fi!

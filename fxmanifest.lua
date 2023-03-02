@@ -13,4 +13,10 @@ client_scripts {
 
 server_script 'server/main.lua'
 
+dependencies {
+    'PolyZone',
+	'qb-target',
+    'futte-newspaper'
+}
+
 lua54 'yes'

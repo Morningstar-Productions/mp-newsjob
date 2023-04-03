@@ -1,25 +1,7 @@
 QBCore = exports['qb-core']:GetCoreObject()
-PlayerJob = {}
-onDuty = false
-
-----------------
--- DrawText3D --
-----------------
-
-local function DrawText3D(x, y, z, text)
-	SetTextScale(0.35, 0.35)
-    SetTextFont(4)
-    SetTextProportional(1)
-    SetTextColour(255, 255, 255, 215)
-    SetTextEntry("STRING")
-    SetTextCentre(true)
-    AddTextComponentString(text)
-    SetDrawOrigin(x,y,z, 0)
-    DrawText(0.0, 0.0)
-    local factor = (string.len(text)) / 370
-    DrawRect(0.0, 0.0+0.0125, 0.017+ factor, 0.03, 0, 0, 0, 75)
-    ClearDrawOrigin()
-end
+PlayerData = QBCore.Functions.GetPlayerData() or {}
+IsLoggedIn = LocalPlayer.state.isLoggedIn
+local inHelicopter, inGarage, inPrompt = false, false, false
 
 ----------
 -- Blip --
@@ -28,17 +10,17 @@ end
 CreateThread(function()
 	for _, info in pairs(Config.BlipLocation) do
 		if Config.UseBlips then
-			info.blip = AddBlipForCoord(info.x, info.y, info.z)
-			SetBlipSprite(info.blip, info.id)
+			info.blip = AddBlipForCoord(-597.89, -929.95, 24.0)
+			SetBlipSprite(info.blip, 459)
 			SetBlipDisplay(info.blip, 4)
 			SetBlipScale(info.blip, 1.0)	
-			SetBlipColour(info.blip, info.colour)
+			SetBlipColour(info.blip, 1)
 			SetBlipAsShortRange(info.blip, true)
 			BeginTextCommandSetBlipName("STRING")
-			AddTextComponentString(info.title)
+			AddTextComponentString("Weazel News HQ")
 			EndTextCommandSetBlipName(info.blip)
 		end
-	end	
+	end
 end)
 
 --------------
@@ -46,185 +28,160 @@ end)
 --------------
 
 RegisterNetEvent('QBCore:Client:OnPlayerLoaded', function()
-    QBCore.Functions.GetPlayerData(function(PlayerData)
-        PlayerJob = PlayerData.job
-        if PlayerData.job.onduty then
-            if PlayerData.job.name == "reporter" then
-                TriggerServerEvent("QBCore:ToggleDuty")
-            end
+    PlayerData = QBCore.Functions.GetPlayerData()
+
+    if PlayerData.job.onduty then
+        if PlayerData.job.name == "reporter" then
+            TriggerServerEvent("QBCore:ToggleDuty")
         end
-    end)
+    end
+
+    IsLoggedIn = true
 end)
 
 RegisterNetEvent('QBCore:Client:OnJobUpdate', function(JobInfo)
-    PlayerJob = JobInfo
-    onDuty = PlayerJob.onduty
-    if PlayerJob.name == "reporter" then
+    if JobInfo.name == 'reporter' and PlayerData.job.name ~= 'reporter' then
+        if JobInfo.onduty then
+            TriggerServerEvent("QBCore:ToggleDuty")
+        end
     end
+
+    PlayerData.job = JobInfo
 end)
 
-RegisterNetEvent('QBCore:Client:SetDuty', function(duty)
-    onDuty = duty
-end)
+---------------
+-- Functions --
+---------------
 
-RegisterNetEvent("newsjob:Duty", function()
-    onDuty = not onDuty
-    TriggerServerEvent("QBCore:ToggleDuty")
-end)
-
-function TakeOutVehicle(vehicleInfo)
-    if PlayerJob.name == "reporter" and  onDuty then
+local function TakeOutVehicle(vehicleInfo)
+    if not inGarage then return end
+    if PlayerData.job.name == "reporter" and PlayerData.job.onduty then
         local coords = Config.Locations["vehicle"].coords
+        if not coords then
+            local plyCoords = GetEntityCoords(cache.ped)
+            coords = vec4(plyCoords.x, plyCoords.y, plyCoords.z, GetEntityHeading(cache.ped))
+        end
         QBCore.Functions.TriggerCallback('QBCore:Server:SpawnVehicle', function(netId)
             local veh = NetToVeh(netId)
             SetVehicleNumberPlateText(veh, "WZNW"..tostring(math.random(1000, 9999)))
             SetEntityHeading(veh, coords.w)
-            exports['LegacyFuel']:SetFuel(veh, 100.0)
+            exports[Config.Fuel]:SetFuel(veh, 100.0)
             TaskWarpPedIntoVehicle(PlayerPedId(), veh, -1)
             TriggerEvent("vehiclekeys:client:SetOwner", QBCore.Functions.GetPlate(veh))
             SetVehicleEngineOn(veh, true, true)
             SetVehicleLivery(veh, 2)
-            CurrentPlate = QBCore.Functions.GetPlate(veh)
         end, vehicleInfo, coords, true)
     end
 end
 
-function MenuGarage()
-    local vehicleMenu = {
-        {
-            header = "Weazel News Vehicles",
-            isMenuHeader = true
-        }
-    }
+local function MenuGarage()
+    local vehicleMenu = {}
 
-    local Vehicles = Config.Vehicles[QBCore.Functions.GetPlayerData().job.grade.level]
+    local Vehicles = Config.Vehicles[PlayerData.job.grade.level]
     for veh, label in pairs(Vehicles) do
-        vehicleMenu[#vehicleMenu+1] = {
-            header = label,
-            txt = "",
-            params = {
-                event = "qb-newsjob:client:TakeOutVehicle",
-                args = {
-                    vehicle = veh
-                }
-            }
+        vehicleMenu[#vehicleMenu + 1] = {
+            title = label,
+            image = "https://media.discordapp.net/attachments/434167856993927178/1092449480781082724/Weazel-news-rumpo-white-front-gtav.png",
+            onSelect = function()
+                TakeOutVehicle(veh)
+            end,
         }
     end
-    vehicleMenu[#vehicleMenu+1] = {
-        header = "⬅ Close Menu",
-        txt = "",
-        params = {
-            event = "qb-menu:client:closeMenu"
-        }
 
-    }
-    exports['qb-menu']:openMenu(vehicleMenu)
+    lib.registerContext({
+        id = "weazel_news_vehicle_menu",
+        title = "Weazel News Vehicles",
+        onExit = function()
+            lib.hideContext()
+        end,
+        position = "top-right",
+        options = vehicleMenu
+    })
+    lib.showContext('weazel_news_vehicle_menu')
 end
 
-function TakeOutHelicopters(vehicleInfo)
-    if PlayerJob.name == "reporter" and  onDuty then
-    	local coords = Config.Locations["heli"].coords
-    	QBCore.Functions.TriggerCallback('QBCore:Server:SpawnVehicle', function(netId)
+local function TakeOutHelicopters(vehicleInfo)
+    if not inHelicopter then return end
+    if PlayerData.job.name == "reporter" and PlayerData.job.onduty then
+        local coords = Config.Locations["heli"].coords
+        if not coords then
+            local plyCoords = GetEntityCoords(cache.ped)
+            coords = vec4(plyCoords.x, plyCoords.y, plyCoords.z, GetEntityHeading(cache.ped))
+        end
+        QBCore.Functions.TriggerCallback('QBCore:Server:SpawnVehicle', function(netId)
             local veh = NetToVeh(netId)
+            SetVehicleLivery(veh, 2)
             SetVehicleNumberPlateText(veh, "WZNW"..tostring(math.random(1000, 9999)))
             SetEntityHeading(veh, coords.w)
-            exports['LegacyFuel']:SetFuel(veh, 100.0)
-            TaskWarpPedIntoVehicle(PlayerPedId(), veh, -1)
+            exports[Config.Fuel]:SetFuel(veh, 100.0)
+            TaskWarpPedIntoVehicle(cache.ped, veh, -1)
             TriggerEvent("vehiclekeys:client:SetOwner", QBCore.Functions.GetPlate(veh))
             SetVehicleEngineOn(veh, true, true)
-            SetVehicleLivery(veh, 2)
-            CurrentPlate = QBCore.Functions.GetPlate(veh)
-    	end, vehicleInfo, coords, true)
+        end, vehicleInfo, coords, true)
     end
 end
 
-function MenuHeliGarage()
-    local vehicleMenu = {
-        {
-            header = "Weazel News Helicopters",
-            isMenuHeader = true
-        }
-    }
+local function MenuHeliGarage()
+    local vehicleMenu = {}
 
-    local Helicopters = Config.Helicopters[QBCore.Functions.GetPlayerData().job.grade.level]
+    local Helicopters = Config.Helicopters[PlayerData.job.grade.level]
     for veh, label in pairs(Helicopters) do
-        vehicleMenu[#vehicleMenu+1] = {
-            header = label,
-            txt = "",
-            params = {
-                event = "qb-newsjob:client:TakeOutHelicopters",
-                args = {
-                    vehicle = veh
-                }
-            }
+        vehicleMenu[#vehicleMenu + 1] = {
+            title = label,
+            image = 'https://media.discordapp.net/attachments/434167856993927178/1092454561475727392/Frogger-GTAV-front.png?width=1246&height=701',
+            onSelect = function()
+                TakeOutHelicopters(veh)
+            end,
         }
     end
-    vehicleMenu[#vehicleMenu+1] = {
-        header = "⬅ Close Menu",
-        txt = "",
-        params = {
-            event = "qb-menu:client:closeMenu"
-        }
 
-    }
-    exports['qb-menu']:openMenu(vehicleMenu)
+    lib.registerContext({
+        id = "news_heli_menu",
+        title = "Weazel News Helicopter",
+        onExit = function()
+            lib.hideContext()
+        end,
+        options = vehicleMenu
+    })
+    lib.showContext('news_heli_menu')
 end
 
-CreateThread(function()
-    while true do
-        Wait(3)
-        if LocalPlayer.state.isLoggedIn then
-            local inRange = false
-            local pos = GetEntityCoords(PlayerPedId())
-            if PlayerJob.name == "reporter" then
-                if #(pos - vector3(Config.Locations["vehicle"].coords.x, Config.Locations["vehicle"].coords.y, Config.Locations["vehicle"].coords.z)) < 10.0 then
-                    inRange = true
-                    DrawMarker(2, Config.Locations["vehicle"].coords.x, Config.Locations["vehicle"].coords.y, Config.Locations["vehicle"].coords.z, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.3, 0.2, 0.15, 200, 200, 200, 222, false, false, false, true, false, false, false)
-                    if #(pos - vector3(Config.Locations["vehicle"].coords.x, Config.Locations["vehicle"].coords.y, Config.Locations["vehicle"].coords.z)) < 1.5 then
-                        if IsPedInAnyVehicle(PlayerPedId(), false) then
-                            DrawText3D(Config.Locations["vehicle"].coords.x, Config.Locations["vehicle"].coords.y, Config.Locations["vehicle"].coords.z, "~g~E~w~ - Store the Vehicle")
+local function uiPrompt(promptType, id)
+    if PlayerData.job.name ~= 'reporter' then return end
+
+    CreateThread(function()
+        while inPrompt do
+            Wait(3)
+            if IsLoggedIn then
+                if IsControlPressed(0, 38) then
+                    if promptType == 'garage' then
+                        if not inGarage then return end
+                        if cache.vehicle then
+                            QBCore.Functions.DeleteVehicle(cache.vehicle)
+                            lib.hideTextUI()
+                            break
                         else
-                            DrawText3D(Config.Locations["vehicle"].coords.x, Config.Locations["vehicle"].coords.y, Config.Locations["vehicle"].coords.z, "~g~E~w~ - Vehicles")
+                            MenuGarage()
+                            lib.hideTextUI()
+                            break
                         end
-                        if IsControlJustReleased(0, 38) then
-                            if IsPedInAnyVehicle(PlayerPedId(), false) then
-                                DeleteVehicle(GetVehiclePedIsIn(PlayerPedId()))
-                            else
-                                MenuGarage()
-                                currentGarage = k
-                            end
-                        end
-                    end
-                elseif  #(pos - vector3(Config.Locations["heli"].coords.x, Config.Locations["heli"].coords.y, Config.Locations["heli"].coords.z)) < 5.0 then
-                    inRange = true
-                    DrawMarker(2, Config.Locations["heli"].coords.x, Config.Locations["heli"].coords.y, Config.Locations["heli"].coords.z, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.3, 0.2, 0.15, 200, 200, 200, 222, false, false, false, true, false, false, false)
-                    if #(pos - vector3(Config.Locations["heli"].coords.x, Config.Locations["heli"].coords.y, Config.Locations["heli"].coords.z)) < 1.5 then
-                        if IsPedInAnyVehicle(PlayerPedId(), false) then
-                            DrawText3D(Config.Locations["heli"].coords.x, Config.Locations["heli"].coords.y, Config.Locations["heli"].coords.z, "~g~E~w~ - Store the Helicopters")
+                    elseif promptType == 'heli' then
+                        if not inHelicopter then return end
+                        if cache.vehicle then
+                            QBCore.Functions.DeleteVehicle(cache.vehicle)
+                            lib.hideTextUI()
+                            break
                         else
-                            DrawText3D(Config.Locations["heli"].coords.x, Config.Locations["heli"].coords.y, Config.Locations["heli"].coords.z, "~g~E~w~ - Helicopters")
-                        end
-                        if IsControlJustReleased(0, 38) then
-                            if IsPedInAnyVehicle(PlayerPedId(), false) then
-                                DeleteVehicle(GetVehiclePedIsIn(PlayerPedId()))
-                            else
-                                MenuHeliGarage()
-                                currentGarage = k
-                            end
+                            MenuHeliGarage()
+                            lib.hideTextUI()
+                            break
                         end
                     end
                 end
-                if not inRange then
-                    Wait(2500)
-                end
-            else
-                Wait(2500)
             end
-        else
-            Wait(2500)
         end
-    end
-end)
+    end)
+end
 
 RegisterNetEvent("newsjob:shop", function()
     if not onDuty then TriggerEvent('QBCore:Notify', "Not clocked in!", 'error') else
@@ -277,7 +234,6 @@ CreateThread(function()
                     job = "reporter",
                 },
             },
-            distance = 1.5
         })
     end
 end)
@@ -303,12 +259,60 @@ CreateThread(function()
     })
 end)
 
-RegisterNetEvent('qb-newsjob:client:TakeOutVehicle', function(data)
-    local vehicle = data.vehicle
-    TakeOutVehicle(vehicle)
-end)
+---------------
+-- Ox Zoning --
+---------------
 
-RegisterNetEvent('qb-newsjob:client:TakeOutHelicopters', function(data)
-    local vehicle = data.vehicle
-    TakeOutHelicopters(vehicle)
+CreateThread(function()
+    -- News Garage
+    for k, v in pairs(Config.Locations.vehicle) do
+        lib.zones.box({
+            coords = v,
+            size = vec3(2, 2, 2),
+            rotation = 0.0,
+            onEnter = function()
+                if PlayerData.job.onduty and PlayerData.job.name == 'reporter' then
+                    inGarage = true
+                    inPrompt = true
+                    if cache.vehicle then
+                        lib.showTextUI('[E] Store Vehicle')
+                    else
+                        lib.showTextUI('[E] Vehicle Garage')
+                    end
+                    uiPrompt('garage')
+                end
+            end,
+            onExit = function()
+                inGarage = false
+                inPrompt = false
+                lib.hideTextUI()
+            end
+        })
+    end
+
+    -- News Helicopter
+    for k, v in pairs(Config.Locations.heli) do
+        lib.zones.box({
+            coords = v,
+            size = vec3(2, 2, 2),
+            rotation = 0.0,
+            onEnter = function()
+                if PlayerData.job.onduty and PlayerData.job.name == 'reporter' then
+                    inHelicopter = true
+                    inPrompt = true
+                    if cache.vehicle then
+                        lib.showTextUI('[E] Store Vehicle')
+                    else
+                        lib.showTextUI('[E] Helicopter Garage')
+                    end
+                    uiPrompt('heli')
+                end
+            end,
+            onExit = function()
+                inHelicopter = false
+                inPrompt = false
+                lib.hideTextUI()
+            end
+        })
+    end
 end)

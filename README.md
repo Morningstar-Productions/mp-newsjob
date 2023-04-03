@@ -1,5 +1,5 @@
 # mp-newsjob
-Reworked News Job for QBCore Framework - Added to by xViperAG
+Reworked News Job for QBox Framework
 
 ## Support me on Ko-Fi!
 ### - xViperAG
@@ -7,32 +7,28 @@ Reworked News Job for QBCore Framework - Added to by xViperAG
 
 ## Join the [Discord](https://discord.gg/3CXrkvQVds)
 
-# Just Added (1.0)
+# Version 2.0.0
 
-* Target Config for Armory, Toggle Duty, and Writing Station.
-* Used futte-newspaper to create Writing Stand.
-* Added Blip for Weazel News.
-* Created Items for Camera, News Mic, and Boom Mic
-
-# Working On
-
-* New Car Spawn System
-* Remove ALL DrawText3Ds from the script
-* Change to PolyZone
+```
+- Transition to QBox/QBCore Enhancement
+- Use of Ox Resources
+- Removed all DrawText Functions
+```
 
 # Credits
 
-* Project Sloth for the Images https://discord.com/invite/projectsloth
-* [QBCore](https://github.com/qbcore-framework/) and Kakarot for the original resource (https://github.com/qbcore-framework/qb-newsjob/)
+* [QBox](https://github.com/qbox-project/) and ChatDisabled (https://github.com/qbcore-framework/qb-newsjob/)
 * [xFutte](https://github.com/xFutte) for futte-newspaper (https://github.com/xFutte/futte-newspaper)
 
 ## If you have any ideas or have added things to the script, don't be afraid to make a Pull Request!
 
 ## Dependencies:
 
-* qb-target https://github.com/qbcore-framework/qb-target
-* qb-inventory https://github.com/qbcore-framework/qb-inventory
-* futte-newspaper https://github.com/xFutte/futte-newspaper
+* ox_target https://github.com/overextended/ox_target
+* ox_inventory https://github.com/overextended/ox_inventory/releases
+* ox_lib https://github.com/overextended/ox_lib/releases
+* futte-newspaper https://github.com/xFutte/futte-newspaper/releases
+* qb-core https://github.com/Qbox-project/qbx-core
 
 ## Need a Weazel News? Here are some suggestions!
 
@@ -55,21 +51,3 @@ You can use the Teleports, if you so choose. You would have to set up the config
 	["newsbmic"] 					 = {["name"] = "newsbmic", 			 			["label"] = "News Boom Microphone", 	["weight"] = 1000, 		["type"] = "item", 		["image"] = "newsbmic.png", 			["unique"] = true, 		["useable"] = true, 	["shouldClose"] = false,   ["combinable"] = nil,   ["description"] = "Boom Microphone for News and Harrassment.. right?"},
 	["newscam"] 					 = {["name"] = "newscam", 			 			["label"] = "News Camera", 				["weight"] = 750, 		["type"] = "item", 		["image"] = "newscam.png", 				["unique"] = true, 		["useable"] = true, 	["shouldClose"] = false,   ["combinable"] = nil,   ["description"] = "Camera for News and Harrassment.. right?"},
 ```
-
-# License
-
-    QBCore Framework
-    Copyright (C) 2021 Joshua Eger
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>

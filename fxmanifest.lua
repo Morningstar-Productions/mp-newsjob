@@ -1,10 +1,13 @@
 fx_version 'cerulean'
 game 'gta5'
 
-description 'QB-NewsJob'
-version '1.0.1'
+description 'mp-newsjob'
+version '2.0.0'
 
-shared_script 'config.lua'
+shared_scripts {
+    'config.lua',
+    '@ox_lib/init.lua'
+}
 
 client_scripts {
     'client/main.lua',
@@ -14,9 +17,9 @@ client_scripts {
 server_script 'server/main.lua'
 
 dependencies {
-    'PolyZone',
-	'qb-target',
-    'futte-newspaper'
+    'futte-newspaper',
+    'ox_lib',
+    'ox_target'
 }
 
 lua54 'yes'

@@ -8,18 +8,16 @@ local inHelicopter, inGarage, inPrompt = false, false, false
 ----------
 
 CreateThread(function()
-	for _, info in pairs(Config.BlipLocation) do
-		if Config.UseBlips then
-			info.blip = AddBlipForCoord(-597.89, -929.95, 24.0)
-			SetBlipSprite(info.blip, 459)
-			SetBlipDisplay(info.blip, 4)
-			SetBlipScale(info.blip, 1.0)	
-			SetBlipColour(info.blip, 1)
-			SetBlipAsShortRange(info.blip, true)
-			BeginTextCommandSetBlipName("STRING")
-			AddTextComponentString("Weazel News HQ")
-			EndTextCommandSetBlipName(info.blip)
-		end
+	if Config.UseBlips then
+		blip = AddBlipForCoord(-597.89, -929.95, 24.0)
+		SetBlipSprite(blip, 459)
+		SetBlipDisplay(blip, 4)
+		SetBlipScale(blip, 1.0)	
+		SetBlipColour(blip, 1)
+		SetBlipAsShortRange(blip, true)
+		BeginTextCommandSetBlipName("STRING")
+		AddTextComponentString("Weazel News HQ")
+		EndTextCommandSetBlipName(blip)
 	end
 end)
 
@@ -70,6 +68,7 @@ local function TakeOutVehicle(vehicleInfo)
             TriggerEvent("vehiclekeys:client:SetOwner", QBCore.Functions.GetPlate(veh))
             SetVehicleEngineOn(veh, true, true)
             SetVehicleLivery(veh, 2)
+            CurrentPlate = QBCore.Functions.GetPlate(veh)
         end, vehicleInfo, coords, true)
     end
 end
@@ -194,18 +193,18 @@ RegisterNetEvent("newsjob:shop", function()
 end)
 
 CreateThread(function()
-    for k, v in pairs(Config.Locations["duty"]) do
+    for k, v in pairs(Config.Locations.duty) do
         exports['qb-target']:AddBoxZone("Duty_"..k, vector3(v.x, v.y, v.z), 1, 1, {
             name = "Duty_"..k,
             heading = 32,
-            debugPoly = false,
+            debugPoly = Config.Debug,
             minZ = v.z - 1,
             maxZ = v.z + 1,
         }, {
             options = {
-                {  
-                    type = "client",
-                    event = "newsjob:Duty",
+                {
+                    type = "server",
+                    event = "QBCore:ToggleDuty",
                     icon = "far fa-clipboard",
                     label = "Clock On/Off",
                     job = "reporter",
@@ -217,11 +216,11 @@ CreateThread(function()
 end)
 
 CreateThread(function()
-    for k, v in pairs(Config.Locations["shop"]) do
+    for k, v in pairs(Config.Locations.shop) do
         exports['qb-target']:AddBoxZone("NewsArmory_"..k, vector3(v.x, v.y, v.z), 1, 1, {
             name = "NewsArmory_"..k,
             heading = 32,
-            debugPoly = false,
+            debugPoly = Config.Debug,
             minZ = v.z - 1,
             maxZ = v.z + 1,
         }, {
@@ -242,7 +241,7 @@ CreateThread(function()
     exports['qb-target']:AddBoxZone("NewsReport", vector3(-591.67, -937.14, 23.88), 1.2, 2.8, {
         name = "NewsReport",
         heading = 0,
-        debugPoly = false,
+        debugPoly = Config.Debug,
         minZ = 23.88 - 1,
         maxZ = 23.88 + 1,
     }, {
@@ -270,8 +269,9 @@ CreateThread(function()
             coords = v,
             size = vec3(2, 2, 2),
             rotation = 0.0,
+            debug = Config.Debug,
             onEnter = function()
-                if PlayerData.job.onduty and PlayerData.job.name == 'reporter' then
+                if PlayerData.job.name == 'reporter' then
                     inGarage = true
                     inPrompt = true
                     if cache.vehicle then
@@ -296,8 +296,9 @@ CreateThread(function()
             coords = v,
             size = vec3(2, 2, 2),
             rotation = 0.0,
+            debug = Config.Debug,
             onEnter = function()
-                if PlayerData.job.onduty and PlayerData.job.name == 'reporter' then
+                if PlayerData.job.name == 'reporter' then
                     inHelicopter = true
                     inPrompt = true
                     if cache.vehicle then

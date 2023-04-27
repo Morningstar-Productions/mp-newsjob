@@ -63,7 +63,11 @@ local function TakeOutVehicle(vehicleInfo)
             local veh = NetToVeh(netId)
             SetVehicleNumberPlateText(veh, "WZNW"..tostring(math.random(1000, 9999)))
             SetEntityHeading(veh, coords.w)
-            exports[Config.Fuel]:SetFuel(veh, 100.0)
+            if Config.Fuel then
+                exports[Config.Fuel]:SetFuel(veh, 100.0)
+            else
+                exports['LegacyFuel']:SetFuel(veh, 100.0)
+            end
             TaskWarpPedIntoVehicle(PlayerPedId(), veh, -1)
             TriggerEvent("vehiclekeys:client:SetOwner", QBCore.Functions.GetPlate(veh))
             SetVehicleEngineOn(veh, true, true)
@@ -112,7 +116,11 @@ local function TakeOutHelicopters(vehicleInfo)
             SetVehicleLivery(veh, 2)
             SetVehicleNumberPlateText(veh, "WZNW"..tostring(math.random(1000, 9999)))
             SetEntityHeading(veh, coords.w)
-            exports[Config.Fuel]:SetFuel(veh, 100.0)
+            if Config.Fuel then
+                exports[Config.Fuel]:SetFuel(veh, 100.0)
+            else
+                exports['LegacyFuel']:SetFuel(veh, 100.0)
+            end
             TaskWarpPedIntoVehicle(cache.ped, veh, -1)
             TriggerEvent("vehiclekeys:client:SetOwner", QBCore.Functions.GetPlate(veh))
             SetVehicleEngineOn(veh, true, true)

@@ -1,12 +1,12 @@
 Config = Config or {}
 
-Config.Debug = false -- Used to Debug the resource
+Config.Debug = true -- Used to Debug the resource
 
 Config.UseBlips = true -- If true enables the blip location for Weazel News
 
 Config.Teleporter = true -- Used for elevator use if NOT using MLO
 
-Config.Fuel = 'LegacyFuel' -- Fueling script for use of vehicles
+Config.Fuel = 'cdn-fuel' -- Fueling script for use of vehicles
 
 Config.Items = {
 	{
@@ -25,24 +25,16 @@ Config.Items = {
 
 Config.Locations = {
 	duty = {
-		{
-			coords = vector3(-591.53, -931.58, 23.86),
-			heading = 32,
-		}
+		vec3(-594.17, -928.67, 22.87),
 	},
 	vehicle = {
-		label = "Vehicle Garage",
-        coords = vector4(-556.47, -925.2, 23.86, 267.24),
+        vec4(-556.47, -925.2, 23.86, 267.24),
 	},
     heli = {
-		label = "Helicopter Garage",
-		coords = vector4(-583.08, -930.55, 36.83, 89.26),
+		vec4(-583.08, -930.55, 36.83, 89.26),
 	},
 	shop = {
-		{
-			coords = vector3(-562.08, -934.93, 23.88),
-			heading = 32
-		}
+		vec3(-590.2, -916.1, 22.87),
 	},
 }
 

@@ -1,5 +1,5 @@
 # mp-newsjob
-Reworked News Job for QBox Framework
+Reworked News Job for QBCore Framework
 
 ## Support me on Ko-Fi!
 ### - xViperAG
@@ -10,14 +10,13 @@ Reworked News Job for QBox Framework
 # Version 2.0.0
 
 ```
-- Transition to QBox/QBCore Enhancement
 - Use of Ox Resources
 - Removed all DrawText Functions
 ```
 
 # Credits
 
-* [QBox](https://github.com/qbox-project/) and ChatDisabled (https://github.com/qbcore-framework/qb-newsjob/)
+* [QBCore](https://github.com/qbcore-framework/) and Kakarot (https://github.com/qbcore-framework/qb-newsjob/)
 * [xFutte](https://github.com/xFutte) for futte-newspaper (https://github.com/xFutte/futte-newspaper)
 
 ## If you have any ideas or have added things to the script, don't be afraid to make a Pull Request!
@@ -28,7 +27,7 @@ Reworked News Job for QBox Framework
 * ox_inventory https://github.com/overextended/ox_inventory/releases
 * ox_lib https://github.com/overextended/ox_lib/releases
 * futte-newspaper https://github.com/xFutte/futte-newspaper/releases
-* qb-core https://github.com/Qbox-project/qbx-core
+* qb-core https://github.com/qbcore-framework/qb-core
 
 ## Need a Weazel News? Here are some suggestions!
 

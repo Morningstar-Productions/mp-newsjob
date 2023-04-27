@@ -54,7 +54,7 @@ end)
 local function TakeOutVehicle(vehicleInfo)
     if not inGarage then return end
     if PlayerData.job.name == "reporter" and PlayerData.job.onduty then
-        local coords = Config.Locations["vehicle"].coords
+        local coords = Config.Locations.vehicle.coords
         if not coords then
             local plyCoords = GetEntityCoords(cache.ped)
             coords = vec4(plyCoords.x, plyCoords.y, plyCoords.z, GetEntityHeading(cache.ped))
@@ -102,7 +102,7 @@ end
 local function TakeOutHelicopters(vehicleInfo)
     if not inHelicopter then return end
     if PlayerData.job.name == "reporter" and PlayerData.job.onduty then
-        local coords = Config.Locations["heli"].coords
+        local coords = Config.Locations.heli.coords
         if not coords then
             local plyCoords = GetEntityCoords(cache.ped)
             coords = vec4(plyCoords.x, plyCoords.y, plyCoords.z, GetEntityHeading(cache.ped))
@@ -183,26 +183,22 @@ local function uiPrompt(promptType, id)
 end
 
 RegisterNetEvent("newsjob:shop", function()
-    if not onDuty then TriggerEvent('QBCore:Notify', "Not clocked in!", 'error') else
-        TriggerServerEvent("inventory:server:OpenInventory", "shop", "reporter", {
-            label = "Weazel News Equipment",
-            items = Config.Items,
-            slots = #Config.Items,
-        })
+    if not PlayerData.job.onduty then TriggerEvent('QBCore:Notify', "Not clocked in!", 'error') else
+        exports.ox_inventory:openInventory("shop", {type = 'reporterShop'})
     end
 end)
 
 CreateThread(function()
     for k, v in pairs(Config.Locations.duty) do
-        exports['qb-target']:AddBoxZone("Duty_"..k, vector3(v.x, v.y, v.z), 1, 1, {
+        exports['qb-target']:AddBoxZone("Duty_"..k, vector3(v.x, v.y, v.z), 1, 0.8, {
             name = "Duty_"..k,
-            heading = 32,
+            heading = 0,
             debugPoly = Config.Debug,
             minZ = v.z - 1,
             maxZ = v.z + 1,
         }, {
             options = {
-                {
+                {  
                     type = "server",
                     event = "QBCore:ToggleDuty",
                     icon = "far fa-clipboard",
@@ -217,12 +213,12 @@ end)
 
 CreateThread(function()
     for k, v in pairs(Config.Locations.shop) do
-        exports['qb-target']:AddBoxZone("NewsArmory_"..k, vector3(v.x, v.y, v.z), 1, 1, {
+        exports['qb-target']:AddBoxZone("NewsArmory_"..k, vector3(v.x, v.y, v.z), 1, 5.6, {
             name = "NewsArmory_"..k,
-            heading = 32,
+            heading = 0,
             debugPoly = Config.Debug,
             minZ = v.z - 1,
-            maxZ = v.z + 1,
+            maxZ = v.z + 1.5,
         }, {
             options = {
                 {  
@@ -267,7 +263,7 @@ CreateThread(function()
     for k, v in pairs(Config.Locations.vehicle) do
         lib.zones.box({
             coords = v,
-            size = vec3(2, 2, 2),
+            size = vec3(4, 3, 2),
             rotation = 0.0,
             debug = Config.Debug,
             onEnter = function()
@@ -294,7 +290,7 @@ CreateThread(function()
     for k, v in pairs(Config.Locations.heli) do
         lib.zones.box({
             coords = v,
-            size = vec3(2, 2, 2),
+            size = vec3(5, 5, 4),
             rotation = 0.0,
             debug = Config.Debug,
             onEnter = function()

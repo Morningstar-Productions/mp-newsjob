@@ -420,7 +420,7 @@ RegisterNetEvent("Mic:ToggleMic", function()
         holdingMic = true
     else
         ClearPedSecondaryTask(GetPlayerPed(PlayerId()))
-        DetachEntity(NetToObj(mic_net), 1, 1)
+        DetachEntity(NetToObj(mic_net), true, true)
         DeleteEntity(NetToObj(mic_net))
         mic_net = nil
         holdingMic = false

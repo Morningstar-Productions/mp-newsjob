@@ -9,7 +9,7 @@ local inHelicopter, inGarage, inPrompt = false, false, false
 
 CreateThread(function()
 	if Config.UseBlips then
-		blip = AddBlipForCoord(-597.89, -929.95, 24.0)
+		local blip = AddBlipForCoord(-597.89, -929.95, 24.0)
 		SetBlipSprite(blip, 459)
 		SetBlipDisplay(blip, 4)
 		SetBlipScale(blip, 1.0)	
@@ -70,7 +70,7 @@ local function TakeOutVehicle(vehicleInfo)
             end
             TaskWarpPedIntoVehicle(PlayerPedId(), veh, -1)
             TriggerEvent("vehiclekeys:client:SetOwner", QBCore.Functions.GetPlate(veh))
-            SetVehicleEngineOn(veh, true, true)
+            SetVehicleEngineOn(veh, true, true, false)
             SetVehicleLivery(veh, 2)
             CurrentPlate = QBCore.Functions.GetPlate(veh)
         end, vehicleInfo, coords, true)
@@ -123,7 +123,7 @@ local function TakeOutHelicopters(vehicleInfo)
             end
             TaskWarpPedIntoVehicle(cache.ped, veh, -1)
             TriggerEvent("vehiclekeys:client:SetOwner", QBCore.Functions.GetPlate(veh))
-            SetVehicleEngineOn(veh, true, true)
+            SetVehicleEngineOn(veh, true, true, false)
         end, vehicleInfo, coords, true)
     end
 end
@@ -190,77 +190,65 @@ local function uiPrompt(promptType, id)
     end)
 end
 
-RegisterNetEvent("newsjob:shop", function()
-    if not PlayerData.job.onduty then TriggerEvent('QBCore:Notify', "Not clocked in!", 'error') else
-        exports.ox_inventory:openInventory("shop", {type = 'reporterShop'})
-    end
-end)
-
-CreateThread(function()
-    for k, v in pairs(Config.Locations.duty) do
-        exports['qb-target']:AddBoxZone("Duty_"..k, vector3(v.x, v.y, v.z), 1, 0.8, {
-            name = "Duty_"..k,
-            heading = 0,
-            debugPoly = Config.Debug,
-            minZ = v.z - 1,
-            maxZ = v.z + 1,
-        }, {
+function CreateTargets()
+    for _, v in pairs(Config.Locations.duty) do
+        exports.ox_target:addSphereZone({
+            coords = vector3(v.x, v.y, v.z),
+            radius = 0.5,
+            debug = Config.Debug,
+            drawSprite = true,
             options = {
-                {  
-                    type = "server",
-                    event = "QBCore:ToggleDuty",
-                    icon = "far fa-clipboard",
-                    label = "Clock On/Off",
-                    job = "reporter",
-                },
-            },
-            distance = 1.5
+                name = 'news_toggleduty',
+                icon = 'fas fa-clipboard',
+                label = 'Clock On/Off',
+                serverEvent = 'QBCore:ToggleDuty',
+                groups = 'reporter',
+                distance = 1.5
+            }
         })
     end
-end)
 
-CreateThread(function()
-    for k, v in pairs(Config.Locations.shop) do
-        exports['qb-target']:AddBoxZone("NewsArmory_"..k, vector3(v.x, v.y, v.z), 1, 5.6, {
-            name = "NewsArmory_"..k,
-            heading = 0,
-            debugPoly = Config.Debug,
-            minZ = v.z - 1,
-            maxZ = v.z + 1.5,
-        }, {
+    for _, v in pairs(Config.Locations.shop) do
+        exports.ox_target:addBoxZone({
+            coords = vec3(v.x, v.y, v.z),
+            size = vec3(5.6, 1, 1.25),
+            rotation = 0,
+            debug = Config.Debug,
+            drawSprite = true,
             options = {
-                {  
-                    type = "client",
-                    event = "newsjob:shop",
-                    icon = "fas fa-basket-shopping",
-                    label = "Open Armory",
-                    job = "reporter",
-                },
-            },
+                icon = "fas fa-basket-shopping",
+                label = "Open Armory",
+                onSelect = function()
+                    if not PlayerData.job.onduty then QBCore.Functions.Notify("Not clocked in!", 'error') else
+                        exports.ox_inventory:openInventory("shop", {type = 'reporterShop'})
+                    end
+                end,
+                groups = 'reporter',
+                distance = 1.5
+            }
         })
     end
-end)
+end
 
-CreateThread(function()
-    exports['qb-target']:AddBoxZone("NewsReport", vector3(-591.67, -937.14, 23.88), 1.2, 2.8, {
-        name = "NewsReport",
-        heading = 0,
-        debugPoly = Config.Debug,
-        minZ = 23.88 - 1,
-        maxZ = 23.88 + 1,
-    }, {
-        options = {
-            {  
-                type = "client",
+function CreateWriterZone()
+    if GetResourceState('futte-newspaper'):match('start') then return end
+
+    for _, v in pairs(Config.Locations.writers) do
+        exports.ox_target:addSphereZone({
+            coords = vector3(-591.67, -937.14, 23.88),
+            radius = 0.5,
+            debug = Config.Debug,
+            drawSprite = true,
+            options = {
                 event = "newspaper:client:openNewspaper",
                 icon = "fas fa-newspaper",
                 label = "Write Report",
-                job = "reporter",
-            },
-        },
-        distance = 1.5
-    })
-end)
+                groups = "reporter",
+                distance = 1.5
+            }
+        })
+    end
+end
 
 ---------------
 -- Ox Zoning --
@@ -268,7 +256,7 @@ end)
 
 CreateThread(function()
     -- News Garage
-    for k, v in pairs(Config.Locations.vehicle) do
+    for _, v in pairs(Config.Locations.vehicle) do
         lib.zones.box({
             coords = v,
             size = vec3(4, 3, 2),
@@ -295,7 +283,7 @@ CreateThread(function()
     end
 
     -- News Helicopter
-    for k, v in pairs(Config.Locations.heli) do
+    for _, v in pairs(Config.Locations.heli) do
         lib.zones.box({
             coords = v,
             size = vec3(5, 5, 4),
@@ -319,5 +307,12 @@ CreateThread(function()
                 lib.hideTextUI()
             end
         })
+    end
+end)
+
+AddEventHandler('onResourceStart', function(resource)
+    if resource == GetCurrentResourceName() then
+        CreateTargets()
+        CreateWriterZone()
     end
 end)

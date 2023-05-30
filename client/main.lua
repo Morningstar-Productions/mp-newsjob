@@ -187,7 +187,7 @@ function CreateTargets()
         exports.ox_target:addSphereZone({
             coords = vector3(v.x, v.y, v.z),
             radius = 0.5,
-            debug = false,
+            debug = Config.Debug,
             drawSprite = true,
             options = {
                 {
@@ -207,7 +207,7 @@ function CreateTargets()
             coords = vec3(v.x, v.y, v.z),
             size = vec3(5.6, 1, 1.25),
             rotation = 0,
-            debug = false,
+            debug = Config.Debug,
             drawSprite = true,
             options = {
                 {
@@ -233,7 +233,7 @@ function CreateWriterZone()
         exports.ox_target:addSphereZone({
             coords = vector3(-591.67, -937.14, 23.88),
             radius = 0.5,
-            debug = false,
+            debug = Config.Debug,
             drawSprite = true,
             options = {
                 event = "newspaper:client:openNewspaper",
@@ -257,7 +257,7 @@ CreateThread(function()
             coords = v,
             size = vec3(4, 3, 2),
             rotation = 0.0,
-            debug = false,
+            debug = Config.Debug,
             onEnter = function()
                 if PlayerData.job.name == 'reporter' then
                     inGarage = true
@@ -288,7 +288,7 @@ CreateThread(function()
             coords = v,
             size = vec3(5, 5, 4),
             rotation = 0.0,
-            debug = false,
+            debug = Config.Debug,
             onEnter = function()
                 if PlayerData.job.name == 'reporter' then
                     inHelicopter = true

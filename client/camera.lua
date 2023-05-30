@@ -61,7 +61,7 @@ local function CheckInputRotation(cam, zoomvalue)
 end
 
 local function HandleZoom(cam)
-	local lPed = PlayerPedId()
+	local lPed = cache.ped
 	if not ( IsPedSittingInAnyVehicle( lPed ) ) then
 
 		if IsControlJustPressed(0,241) then
@@ -154,7 +154,7 @@ CreateThread(function()
 				Wait(100)
 			end
 
-			if not IsEntityPlayingAnim(PlayerPedId(), camanimDict, camanimName, 3) then
+			if not IsEntityPlayingAnim(cache.ped, camanimDict, camanimName, 3) then
 				TaskPlayAnim(GetPlayerPed(PlayerId()), 1.0, -1, -1, 50, 0, 0, 0, 0) -- 50 = 32 + 16 + 2
 				TaskPlayAnim(GetPlayerPed(PlayerId()), camanimDict, camanimName, 1.0, -1, -1, 50, 0, 0, 0, 0)
 			end
@@ -163,7 +163,7 @@ CreateThread(function()
 			DisableControlAction(0,25,true) -- disable aim
 			--DisableControlAction(0, 44,  true) -- INPUT_COVER
 			DisableControlAction(0,37,true) -- INPUT_SELECT_WEAPON
-			SetCurrentPedWeapon(PlayerPedId(), GetHashKey("WEAPON_UNARMED"), true)
+			SetCurrentPedWeapon(cache.ped, GetHashKey("WEAPON_UNARMED"), true)
 			Wait(7)
 		else
 			Wait(1000)
@@ -187,7 +187,7 @@ CreateThread(function()
 					Wait(10)
 				end
 
-				local lPed = PlayerPedId()
+				local lPed = cache.ped
 				local vehicle = GetVehiclePedIsIn(lPed)
 				local cam1 = CreateCam("DEFAULT_SCRIPTED_FLY_CAMERA", true)
 
@@ -226,8 +226,8 @@ CreateThread(function()
 						camHeading = 180.0
 					end
 					camHeading = (camHeading + 180.0) / 360.0
-					SetTaskMoveNetworkSignalFloat(PlayerPedId(), "Pitch", camPitch)
-					SetTaskMoveNetworkSignalFloat(PlayerPedId(), "Heading", camHeading * -1.0 + 1.0)
+					SetTaskMoveNetworkSignalFloat(cache.ped, "Pitch", camPitch)
+					SetTaskMoveNetworkSignalFloat(cache.ped, "Heading", camHeading * -1.0 + 1.0)
 					Wait(1)
 				end
 				movcamera = false
@@ -265,7 +265,7 @@ CreateThread(function()
 				while not HasScaleformMovieLoaded(scaleform2) do
 					Wait(10)
 				end
-				local lPed = PlayerPedId()
+				local lPed = cache.ped
 				local vehicle = GetVehiclePedIsIn(lPed)
 				local cam2 = CreateCam("DEFAULT_SCRIPTED_FLY_CAMERA", true)
 				AttachCamToEntity(cam2, lPed, 0.0,0.0,1.0, true)
@@ -302,8 +302,8 @@ CreateThread(function()
 						camHeading = 180.0
 					end
 					camHeading = (camHeading + 180.0) / 360.0
-					SetTaskMoveNetworkSignalFloat(PlayerPedId(), "Pitch", camPitch)
-					SetTaskMoveNetworkSignalFloat(PlayerPedId(), "Heading", camHeading * -1.0 + 1.0)
+					SetTaskMoveNetworkSignalFloat(cache.ped, "Pitch", camPitch)
+					SetTaskMoveNetworkSignalFloat(cache.ped, "Heading", camHeading * -1.0 + 1.0)
 					Wait(1)
 				end
 				newscamera = false
@@ -360,17 +360,17 @@ CreateThread(function()
 				RequestAnimDict(bmicanimDict)
 				Wait(100)
 			end
-			if not IsEntityPlayingAnim(PlayerPedId(), bmicanimDict, bmicanimName, 3) then
-				TaskPlayAnim(PlayerPedId(), 1.0, -1, -1, 50, 0, 0, 0, 0) -- 50 = 32 + 16 + 2
-				TaskPlayAnim(PlayerPedId(), bmicanimDict, bmicanimName, 1.0, -1, -1, 50, 0, 0, 0, 0)
+			if not IsEntityPlayingAnim(cache.ped, bmicanimDict, bmicanimName, 3) then
+				TaskPlayAnim(cache.ped, 1.0, -1, -1, 50, 0, 0, 0, 0) -- 50 = 32 + 16 + 2
+				TaskPlayAnim(cache.ped, bmicanimDict, bmicanimName, 1.0, -1, -1, 50, 0, 0, 0, 0)
 			end
 			DisablePlayerFiring(PlayerId(), true)
 			DisableControlAction(0,25,true) -- disable aim
 			--DisableControlAction(0, 44,  true) -- INPUT_COVER
 			DisableControlAction(0,37,true) -- INPUT_SELECT_WEAPON
-			SetCurrentPedWeapon(PlayerPedId(), GetHashKey("WEAPON_UNARMED"), true)
-			if IsPedInAnyVehicle(PlayerPedId(), false) or QBCore.Functions.GetPlayerData().metadata["ishandcuffed"] or holdingMic then
-				ClearPedSecondaryTask(PlayerPedId())
+			SetCurrentPedWeapon(cache.ped, GetHashKey("WEAPON_UNARMED"), true)
+			if cache.vehicle or QBCore.Functions.GetPlayerData().metadata["ishandcuffed"] or holdingMic then
+				ClearPedSecondaryTask(cache.ped)
 				DetachEntity(NetToObj(bmic_net), 1, 1)
 				DeleteEntity(NetToObj(bmic_net))
 				bmic_net = nil

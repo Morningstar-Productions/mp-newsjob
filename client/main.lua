@@ -8,17 +8,15 @@ local inHelicopter, inGarage, inPrompt = false, false, false
 ----------
 
 CreateThread(function()
-	if Config.UseBlips then
-		local blip = AddBlipForCoord(-597.89, -929.95, 24.0)
-		SetBlipSprite(blip, 459)
-		SetBlipDisplay(blip, 4)
-		SetBlipScale(blip, 1.0)	
-		SetBlipColour(blip, 1)
-		SetBlipAsShortRange(blip, true)
-		BeginTextCommandSetBlipName("STRING")
-		AddTextComponentString("Weazel News HQ")
-		EndTextCommandSetBlipName(blip)
-	end
+    local blip = AddBlipForCoord(-597.89, -929.95, 24.0)
+    SetBlipSprite(blip, 459)
+    SetBlipDisplay(blip, 4)
+    SetBlipScale(blip, 1.0)	
+    SetBlipColour(blip, 1)
+    SetBlipAsShortRange(blip, true)
+    BeginTextCommandSetBlipName("STRING")
+    AddTextComponentString("Weazel News HQ")
+    EndTextCommandSetBlipName(blip)
 end)
 
 --------------
@@ -63,12 +61,8 @@ local function TakeOutVehicle(vehicleInfo)
             local veh = NetToVeh(netId)
             SetVehicleNumberPlateText(veh, "WZNW"..tostring(math.random(1000, 9999)))
             SetEntityHeading(veh, coords.w)
-            if Config.Fuel then
-                exports[Config.Fuel]:SetFuel(veh, 100.0)
-            else
-                exports['LegacyFuel']:SetFuel(veh, 100.0)
-            end
-            TaskWarpPedIntoVehicle(PlayerPedId(), veh, -1)
+            exports[Config.Fuel]:SetFuel(veh, 100.0)
+            TaskWarpPedIntoVehicle(cache.ped, veh, -1)
             TriggerEvent("vehiclekeys:client:SetOwner", QBCore.Functions.GetPlate(veh))
             SetVehicleEngineOn(veh, true, true, false)
             SetVehicleLivery(veh, 2)
@@ -116,11 +110,7 @@ local function TakeOutHelicopters(vehicleInfo)
             SetVehicleLivery(veh, 2)
             SetVehicleNumberPlateText(veh, "WZNW"..tostring(math.random(1000, 9999)))
             SetEntityHeading(veh, coords.w)
-            if Config.Fuel then
-                exports[Config.Fuel]:SetFuel(veh, 100.0)
-            else
-                exports['LegacyFuel']:SetFuel(veh, 100.0)
-            end
+            exports[Config.Fuel]:SetFuel(veh, 100.0)
             TaskWarpPedIntoVehicle(cache.ped, veh, -1)
             TriggerEvent("vehiclekeys:client:SetOwner", QBCore.Functions.GetPlate(veh))
             SetVehicleEngineOn(veh, true, true, false)
@@ -195,15 +185,17 @@ function CreateTargets()
         exports.ox_target:addSphereZone({
             coords = vector3(v.x, v.y, v.z),
             radius = 0.5,
-            debug = Config.Debug,
+            debug = false,
             drawSprite = true,
             options = {
-                name = 'news_toggleduty',
-                icon = 'fas fa-clipboard',
-                label = 'Clock On/Off',
-                serverEvent = 'QBCore:ToggleDuty',
-                groups = 'reporter',
-                distance = 1.5
+                {
+                    name = 'news_toggleduty',
+                    icon = 'fas fa-clipboard',
+                    label = 'Clock On/Off',
+                    serverEvent = 'QBCore:ToggleDuty',
+                    groups = 'reporter',
+                    distance = 1.5
+                }
             }
         })
     end
@@ -213,18 +205,20 @@ function CreateTargets()
             coords = vec3(v.x, v.y, v.z),
             size = vec3(5.6, 1, 1.25),
             rotation = 0,
-            debug = Config.Debug,
+            debug = false,
             drawSprite = true,
             options = {
-                icon = "fas fa-basket-shopping",
-                label = "Open Armory",
-                onSelect = function()
-                    if not PlayerData.job.onduty then QBCore.Functions.Notify("Not clocked in!", 'error') else
-                        exports.ox_inventory:openInventory("shop", {type = 'reporterShop'})
-                    end
-                end,
-                groups = 'reporter',
-                distance = 1.5
+                {
+                    icon = "fas fa-basket-shopping",
+                    label = "Open Armory",
+                    onSelect = function()
+                        if not PlayerData.job.onduty then QBCore.Functions.Notify("Not clocked in!", 'error') else
+                            exports.ox_inventory:openInventory("shop", {type = 'reporterShop'})
+                        end
+                    end,
+                    groups = 'reporter',
+                    distance = 1.5
+                }
             }
         })
     end
@@ -237,7 +231,7 @@ function CreateWriterZone()
         exports.ox_target:addSphereZone({
             coords = vector3(-591.67, -937.14, 23.88),
             radius = 0.5,
-            debug = Config.Debug,
+            debug = false,
             drawSprite = true,
             options = {
                 event = "newspaper:client:openNewspaper",
@@ -261,15 +255,19 @@ CreateThread(function()
             coords = v,
             size = vec3(4, 3, 2),
             rotation = 0.0,
-            debug = Config.Debug,
+            debug = false,
             onEnter = function()
                 if PlayerData.job.name == 'reporter' then
                     inGarage = true
                     inPrompt = true
                     if cache.vehicle then
-                        lib.showTextUI('[E] Store Vehicle')
+                        lib.showTextUI('[E] Store Vehicle', {
+                            position = 'left-center',
+                        })
                     else
-                        lib.showTextUI('[E] Vehicle Garage')
+                        lib.showTextUI('[E] Vehicle Garage', {
+                            position = 'left-center',
+                        })
                     end
                     uiPrompt('garage')
                 end
@@ -288,15 +286,19 @@ CreateThread(function()
             coords = v,
             size = vec3(5, 5, 4),
             rotation = 0.0,
-            debug = Config.Debug,
+            debug = false,
             onEnter = function()
                 if PlayerData.job.name == 'reporter' then
                     inHelicopter = true
                     inPrompt = true
                     if cache.vehicle then
-                        lib.showTextUI('[E] Store Vehicle')
+                        lib.showTextUI('[E] Store Vehicle', {
+                            position = 'left-center',
+                        })
                     else
-                        lib.showTextUI('[E] Helicopter Garage')
+                        lib.showTextUI('[E] Helicopter Garage', {
+                            position = 'left-center',
+                        })
                     end
                     uiPrompt('heli')
                 end

@@ -7,17 +7,19 @@ local inHelicopter, inGarage, inPrompt = false, false, false
 -- Blip --
 ----------
 
-CreateThread(function()
-    local blip = AddBlipForCoord(-597.89, -929.95, 24.0)
-    SetBlipSprite(blip, 459)
-    SetBlipDisplay(blip, 4)
-    SetBlipScale(blip, 1.0)	
-    SetBlipColour(blip, 1)
-    SetBlipAsShortRange(blip, true)
-    BeginTextCommandSetBlipName("STRING")
-    AddTextComponentString("Weazel News HQ")
-    EndTextCommandSetBlipName(blip)
-end)
+if Config.UseBlips then
+    CreateThread(function()
+        local blip = AddBlipForCoord(-597.89, -929.95, 24.0)
+        SetBlipSprite(blip, 459)
+        SetBlipDisplay(blip, 4)
+        SetBlipScale(blip, 1.0)	
+        SetBlipColour(blip, 1)
+        SetBlipAsShortRange(blip, true)
+        BeginTextCommandSetBlipName("STRING")
+        AddTextComponentString("Weazel News HQ")
+        EndTextCommandSetBlipName(blip)
+    end)
+end
 
 --------------
 -- Handlers --

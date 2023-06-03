@@ -1,59 +1,40 @@
-Config = {}
+Config = Config or {}
 
-Config.UseBlips = true
+Config.Debug = true -- Used to Debug the resource
 
-Config.BlipLocation = {
-	{
-        title = "Weazel News", 
-        colour = 1, 
-        id = 459, 
-        x = -597.89, 
-        y = -929.95, 
-        z = 24.0
-    },
-}
+Config.UseBlips = true -- If true enables the blip location for Weazel News
+
+Config.Teleporter = true -- Used for elevator use if NOT using MLO
+
+Config.Fuel = 'cdn-fuel' -- Fueling script for use of vehicles
 
 Config.Items = {
-	[1] = {
+	{
         name = "newscam",
         price = 500,
-        amount = 5,
-        info = {},
-        type = "item",
-        slot = 1,
     },
-    [2] = {
+    {
         name = "newsbmic",
         price = 350,
-        amount = 5,
-        info = {},
-        type = "item",
-        slot = 2,
     },
-    [3] = {
+    {
         name = "newsmic",
         price = 250,
-        amount = 5,
-        info = {},
-        type = "item",
-        slot = 3,
     },
 }
 
 Config.Locations = {
-	["duty"] = {
-		[1] = vector3(-591.53, -931.58, 23.86),
+	duty = {
+		vec3(-594.17, -928.67, 22.87),
 	},
-   	["vehicle"] = {
-       	 	label = "Vehicle Storage",
-        	coords = vector4(-556.47, -925.2, 23.86, 267.24),
-    	},
-    	["heli"] = {
-		label = "Helicopter Storage",
-		coords = vector4(-583.08, -930.55, 36.83, 89.26),
+	vehicle = {
+        vec4(-556.47, -925.2, 23.86, 267.24),
 	},
-	["shop"] = {
-		[1] = vector3(-562.08, -934.93, 23.88),
+    heli = {
+		vec4(-583.08, -930.55, 36.83, 89.26),
+	},
+	shop = {
+		vec3(-590.2, -916.1, 22.87),
 	},
 }
 

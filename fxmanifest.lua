@@ -22,6 +22,6 @@ server_script 'server/main.lua'
 dependencies {
     'futte-newspaper',
     'ox_lib',
-    'qb-target',
+    'ox_target',
     'ox_inventory'
 }

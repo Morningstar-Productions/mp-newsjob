@@ -27,7 +27,6 @@ local fov = (fov_max+fov_min)*0.5
 local new_z
 local movcamera
 local newscamera
-local QBCore = exports['qb-core']:GetCoreObject()
 
 --FUNCTIONS--
 local function HideHUDThisFrame()

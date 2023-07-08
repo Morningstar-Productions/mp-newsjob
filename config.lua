@@ -4,23 +4,13 @@ Config.Debug = true -- Used to Debug the resource
 
 Config.UseBlips = true -- If true enables the blip location for Weazel News
 
-Config.Teleporter = true -- Used for elevator use if NOT using MLO
-
-Config.Fuel = 'cdn-fuel' -- Fueling script for use of vehicles
+--Config.Teleporter = true -- Used for elevator use if NOT using MLO | COMING SOON
 
 Config.Items = {
-	{
-        name = "newscam",
-        price = 500,
-    },
-    {
-        name = "newsbmic",
-        price = 350,
-    },
-    {
-        name = "newsmic",
-        price = 250,
-    },
+	{ name = "newscamera", price = 100 },
+	{ name = "newsboom", price = 100 },
+	{ name = "newsmic", price = 100 },
+	{ name = 'newslight', price = 100 }
 }
 
 Config.Locations = {
@@ -41,45 +31,47 @@ Config.Locations = {
 Config.Vehicles = {
 	-- Grade 0
 	[0] = {
-		["rumpo"] = "Rumpo",
+		["newsvan"] = "Weazel News Van",
 	},
 	-- Grade 1
 	[1] = {
-		["rumpo"] = "Rumpo",
+		["newsvan"] = "Weazel News Van",
 	},
 	-- Grade 2
 	[2] = {
-		["rumpo"] = "Rumpo",
+		["newsvan"] = "Weazel News Van",
 	},
 	-- Grade 3
 	[3] = {
-		["rumpo"] = "Rumpo",
+		["newsvan"] = "Weazel News Van",
 	},
 	-- Grade 4
 	[4] = {
-		["rumpo"] = "Rumpo",
+		["newsvan"] = "Weazel News Van",
 	}
 }
 
 Config.Helicopters = {
 	-- Grade 0
 	[0] = {
-		["frogger"] = "Frogger",
+		["newsmav"] = "Weazel News Maverick",
 	},
 	-- Grade 1
 	[1] = {
-		["frogger"] = "Frogger",
+		["newsmav"] = "Weazel News Maverick",
 	},
 	-- Grade 2
 	[2] = {
-		["frogger"] = "Frogger",
+		["newsmav"] = "Weazel News Maverick",
 	},
 	-- Grade 3
 	[3] = {
-		["frogger"] = "Frogger",
+		["newsmav"] = "Weazel News Maverick",
 	},
 	-- Grade 4
 	[4] = {
-		["frogger"] = "Frogger",
+		["newsmav"] = "Weazel News Maverick",
 	}
 }
+
+QBCore = exports['qb-core']:GetCoreObject()

@@ -1,5 +1,3 @@
-local QBCore = exports['qb-core']:GetCoreObject()
-
 AddEventHandler('onServerResourceStart', function(resourceName)
 	if resourceName == 'ox_inventory' or resourceName == GetCurrentResourceName() then
 		exports.ox_inventory:RegisterShop("reporterShop", {
@@ -9,29 +7,35 @@ AddEventHandler('onServerResourceStart', function(resourceName)
 	end
 end)
 
-QBCore.Functions.CreateUseableItem("newsbmic", function(source, item)
+exports("newsbmic", function(source, item, inv, slot, data)
     local src = source
-    local Player = QBCore.Functions.GetPlayer(src)
 
-    if not Player then return end
+    item = inv.items[slot]
+    src = inv.id
 
-    TriggerClientEvent("Mic:ToggleBMic", source)
+    if type(source) == 'string' and source ~= 'usingItem' then return end
+
+    TriggerClientEvent("Mic:ToggleBMic", src)
 end)
 
-QBCore.Functions.CreateUseableItem("newscam", function(source, item)
+exports("newscam", function(source, item, inv, slot, data)
     local src = source
-    local Player = QBCore.Functions.GetPlayer(src)
 
-    if not Player then return end
+    item = inv.items[slot]
+    src = inv.id
 
-    TriggerClientEvent("Cam:ToggleCam", source)
+    if type(source) == 'string' and source ~= 'usingItem' then return end
+
+    TriggerClientEvent("Cam:ToggleCam", src)
 end)
 
-QBCore.Functions.CreateUseableItem("newsmic", function(source, item)
+exports("newsmic", function(source, item, inv, slot, data)
     local src = source
-    local Player = QBCore.Functions.GetPlayer(src)
 
-    if not Player then return end
+    item = inv.items[slot]
+    src = inv.id
 
-    TriggerClientEvent("Mic:ToggleMic", source)
+    if type(source) == 'string' and source ~= 'usingItem' then return end
+
+    TriggerClientEvent("Mic:ToggleMic", src)
 end)

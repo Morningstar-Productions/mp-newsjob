@@ -1,4 +1,3 @@
-QBCore = exports['qb-core']:GetCoreObject()
 PlayerData = QBCore.Functions.GetPlayerData() or {}
 IsLoggedIn = LocalPlayer.state.isLoggedIn
 local inHelicopter, inGarage, inPrompt = false, false, false
@@ -63,7 +62,7 @@ local function TakeOutVehicle(vehicleInfo)
             local veh = NetToVeh(netId)
             SetVehicleNumberPlateText(veh, "WZNW"..tostring(math.random(1000, 9999)))
             SetEntityHeading(veh, coords.w)
-            exports[Config.Fuel]:SetFuel(veh, 100.0)
+            SetVehicleFuelLevel(veh, 100.0)
             TaskWarpPedIntoVehicle(cache.ped, veh, -1)
             TriggerEvent("vehiclekeys:client:SetOwner", QBCore.Functions.GetPlate(veh))
             SetVehicleEngineOn(veh, true, true, false)
@@ -112,7 +111,7 @@ local function TakeOutHelicopters(vehicleInfo)
             SetVehicleLivery(veh, 2)
             SetVehicleNumberPlateText(veh, "WZNW"..tostring(math.random(1000, 9999)))
             SetEntityHeading(veh, coords.w)
-            exports[Config.Fuel]:SetFuel(veh, 100.0)
+            SetVehicleFuelLevel(veh, 100.0)
             TaskWarpPedIntoVehicle(cache.ped, veh, -1)
             TriggerEvent("vehiclekeys:client:SetOwner", QBCore.Functions.GetPlate(veh))
             SetVehicleEngineOn(veh, true, true, false)

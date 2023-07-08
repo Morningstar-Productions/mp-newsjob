@@ -5,7 +5,7 @@ lua54 'yes'
 name 'mp-newsjob'
 description 'Enhanced News Job for QBCore'
 author 'xViperAG'
-version '2.0.0'
+version '2.1.0'
 
 shared_scripts {
     'config.lua',

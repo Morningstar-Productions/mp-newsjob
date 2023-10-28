@@ -26,6 +26,9 @@ Config.Locations = {
 	shop = {
 		vec3(-590.2, -916.1, 22.87),
 	},
+	writers = {
+		vec3(-591.67, -937.14, 23.88),
+	}
 }
 
 Config.Vehicles = {
@@ -74,4 +77,4 @@ Config.Helicopters = {
 	}
 }
 
-QBCore = exports['qb-core']:GetCoreObject()
+qbCore = exports['qb-core']:GetCoreObject()

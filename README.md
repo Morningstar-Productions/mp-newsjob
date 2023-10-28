@@ -34,10 +34,10 @@ Join the Discord here! [Discord](https://discord.gg/3CXrkvQVds)
 - [ox_target](https://github.com/overextended/ox_target)
 - [ox_inventory](https://github.com/overextended/ox_inventory/releases)
 - [ox_lib](https://github.com/overextended/ox_lib/releases)
-- [qb-core](https://github.com/qbcore-framework/qb-core)
-- [futte-newspaper](https://github.com/xFutte/futte-newspaper)
+- [qbx_core](https://github.com/QBox-Project/qbx_core)
 
 # Optional Dependencies
+- [futte-newspaper](https://github.com/xFutte/futte-newspaper)
 - [r14-objects](https://r14-dev.tebex.io/package/5027078)
 
 - I will be adding this to [mp-importvehicles](https://www.github.com/Morningstar-Productions/mp-importvehicles)

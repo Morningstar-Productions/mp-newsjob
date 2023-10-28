@@ -10,9 +10,6 @@ local micanimName = "ped_a_enter_loop"
 local bmicModel = "prop_v_bmike_01"
 local bmicanimDict = "missfra1"
 local bmicanimName = "mcs2_crew_idle_m_boom"
-local bmic_net = nil
-local mic_net = nil
-local cam_net = nil
 local UI = {
 	x =  0.000 ,
 	y = -0.001 ,
@@ -104,12 +101,6 @@ local function Breaking(text)
 	SetTextEntry("STRING")
 	AddTextComponentString(text)
 	DrawText(0.2, 0.85)
-end
-
-local function DisplayNotification(string)
-	SetTextComponentFormat("STRING")
-	AddTextComponentString(string)
-    DisplayHelpTextFromStringLabel(0, 0, 1, -1)
 end
 
 ---------------------------------------------------------------------------
@@ -321,41 +312,21 @@ exports("newsboom", function(data, slot)
         local plyCoords = GetOffsetFromEntityInWorldCoords(cache.ped, 0.0, 0.0, -5.0)
         bmicspawned = CreateObject(GetHashKey(bmicModel), plyCoords.x, plyCoords.y, plyCoords.z, true, true, false)
 		AttachEntityToEntity(bmicspawned, cache.ped, GetPedBoneIndex(cache.ped, 28422), -0.08, 0.0, 0.0, 0.0, 0.0, 0.0, true, true, false, true, 0, true)
-    else
+		CreateThread(function()
+			while holdingBmic do
+				DisablePlayerFiring(PlayerId(), true)
+				DisableControlAction(0,25,true) -- disable aim
+				--DisableControlAction(0, 44,  true) -- INPUT_COVER
+				DisableControlAction(0,37,true) -- INPUT_SELECT_WEAPON
+				SetCurrentPedWeapon(cache.ped, GetHashKey("WEAPON_UNARMED"), true)
+				Wait(10)
+			end
+		end)
+	else
         ClearPedSecondaryTask(cache.ped)
 		DeleteObject(bmicspawned)
         holdingBmic = false
     end
-end)
-
-CreateThread(function()
-	while true do
-		if holdingBmic then
-			while not HasAnimDictLoaded(bmicanimDict) do
-				RequestAnimDict(bmicanimDict)
-				Wait(100)
-			end
-			if not IsEntityPlayingAnim(cache.ped, bmicanimDict, bmicanimName, 3) then
-				TaskPlayAnim(cache.ped, 1.0, -1, -1, 50, 0, 0, 0, 0) -- 50 = 32 + 16 + 2
-				TaskPlayAnim(cache.ped, bmicanimDict, bmicanimName, 1.0, -1, -1, 50, 0, 0, 0, 0)
-			end
-			DisablePlayerFiring(PlayerId(), true)
-			DisableControlAction(0,25,true) -- disable aim
-			--DisableControlAction(0, 44,  true) -- INPUT_COVER
-			DisableControlAction(0,37,true) -- INPUT_SELECT_WEAPON
-			SetCurrentPedWeapon(cache.ped, GetHashKey("WEAPON_UNARMED"), true)
-			if cache.vehicle or QBCore.Functions.GetPlayerData().metadata["ishandcuffed"] or holdingMic then
-				ClearPedSecondaryTask(cache.ped)
-				DetachEntity(NetToObj(bmic_net), 1, 1)
-				DeleteEntity(NetToObj(bmic_net))
-				bmic_net = nil
-				holdingBmic = false
-			end
-			Wait(7)
-		else
-			Wait(1000)
-		end
-	end
 end)
 
 ---------------------------------------------------------------------------

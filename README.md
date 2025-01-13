@@ -10,7 +10,7 @@ The initial use for this script is for any developer/server owner using the QBCo
 
 Support Provided:
 
-- QBCore Framework ✅
+- QBCore Framework ❌
 - QBox Project ✅
 - ESX Framework (Legacy or 1.1) ❌
 
@@ -24,11 +24,11 @@ Join the Discord here! [Discord](https://discord.gg/3CXrkvQVds)
 - Zone for Vehicles
 - Target for Newspaper, Duty, and More
 - Use of ox_inventory Stashes and Items
+- Use of exports for Items
 
 # Planned
-- Elevator Use for Interiors
-- Teleporter for IPL News Stations
-- Use of exports for Items
+- Elevator Use for Interiors (Coming Soon)
+- Teleporter for IPL News Stations (Coming Soon)
 
 # Dependencies 
 - [ox_target](https://github.com/overextended/ox_target)
@@ -46,10 +46,8 @@ Join the Discord here! [Discord](https://discord.gg/3CXrkvQVds)
 # Change Logs
 - 1.0 - Inital release
 - 2.0 - Script Revamp and Ox Optimization
+- 3.0 - Rewrite for New Qbox Vehicle Spawns and More
 
 ### Support me on Ko-Fi!
 #### - xViperAG
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/xviperag)
-
-# Credits
-- [QBCore](https://github.com/qbcore-framework) - Additional Types and New Locations

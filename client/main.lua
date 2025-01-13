@@ -50,6 +50,16 @@ end)
 -- Functions --
 ---------------
 
+local function Notify(title, description, type, duration, icon)
+    lib.notify({
+        title = title,
+        description = description,
+        type = type,
+        duration = duration,
+        icon = icon
+    })
+end
+
 local function TakeOutVehicle(vehicleInfo)
     if not inGarage then return end
     if QBX.PlayerData.job.type == "reporter" and QBX.PlayerData.job.onduty then
@@ -203,7 +213,7 @@ function CreateTargets()
                     label = "Open Armory",
                     onSelect = function()
                         if not QBX.PlayerData.job.onduty then
-                            return exports['rhrp-lib']:Notify('Weazel News', 'You are not clocked in!', 'error', 5000, 'fas fa-newspaper')
+                            return Notify('Weazel News', 'You are not clocked in!', 'error', 5000, 'fas fa-newspaper')
                         end
 
                         exports.ox_inventory:openInventory("shop", {type = 'reporterShop'})

@@ -224,6 +224,27 @@ function CreateTargets()
             }
         })
     end
+
+    for i = 1, #jobLocs.duty do
+        exports.ox_target:addSphereZone({
+            coords = vec3(jobLocs.duty[i].x, jobLocs.duty[i].y, jobLocs.duty[i].z),
+            size = vec3(5.6, 1, 1.25),
+            rotation = 0,
+            debug = config.debug,
+            drawSprite = true,
+            options = {
+                {
+                    icon = "fas fa-basket-shopping",
+                    label = "Toggle Duty",
+                    onSelect = function()
+                        TriggerServerEvent('QBCore:ToggleDuty')
+                    end,
+                    groups = config.groups,
+                    distance = 1.5
+                }
+            }
+        })
+    end
 end
 
 function CreateWriterZone()
